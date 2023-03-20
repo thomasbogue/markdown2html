@@ -22,7 +22,6 @@ if len(sys.argv) <= 1:
 for filename in sys.argv[1:]:
   infile = codecs.open(filename, encoding='utf-8')
   outfilename = re.sub(r'.md$', '.html', filename)
-  print("outputting html to " + outfilename)
   outfile = codecs.open(outfilename, 'w', encoding='utf-8')
   outfile.write("<html><head><title>" + filename + "</title></head><body>\n")
   previousIndentLevel = 0
@@ -34,7 +33,6 @@ for filename in sys.argv[1:]:
     firstchar = line.strip()[0]
     # look for tables
     if firstchar == '|':
-        print("line = " + line + " lastrowTable=" + str(lastrowTable))
         if not lastrowTable:
             outfile.write("<table>\n")
         lastrowTable = True
