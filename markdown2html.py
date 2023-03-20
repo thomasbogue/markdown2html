@@ -19,17 +19,40 @@ if len(sys.argv) <= 1:
     print("converts the selected markdown files to approximate html")
     exit(-1)
 
-for filename in sys.argv[2:]:
+for filename in sys.argv[1:]:
   infile = codecs.open(filename, encoding='utf-8')
   outfilename = re.sub(r'.md$', '.html', filename)
+  print("outputting html to " + outfilename)
   outfile = codecs.open(outfilename, 'w', encoding='utf-8')
   outfile.write("<html><head><title>" + filename + "</title></head><body>\n")
   previousIndentLevel = 0
+  lastrowTable = False
   for line in infile:
     # skip blank lines
     if len(line.strip()) == 0:
         continue
     firstchar = line.strip()[0]
+    # look for tables
+    if firstchar == '|':
+        print("line = " + line + " lastrowTable=" + str(lastrowTable))
+        if not lastrowTable:
+            outfile.write("<table>\n")
+        lastrowTable = True
+        if re.match(r'^[-|]+$', line.strip()):
+	    # not sure how to format hrules -- skipping
+            print("skipping hrule")
+            continue
+        else:
+            line = line.strip()
+            line = re.sub(r"^\|", "<tr><td>", line)
+            line = re.sub(r"\|$", "</td></tr>", line)
+            line = line.replace("|", "</td><td>")
+            outfile.write(line + "\n")
+            continue
+    else:
+        if lastrowTable:
+            lastrowTable = False
+            outfile.write("</table>\n")
     # look for header lines, ignore indents for them
     if firstchar == '#':
         headernum = 0
@@ -37,6 +60,7 @@ for filename in sys.argv[2:]:
             headernum = headernum + 1
         outfile.write("<h" + str(headernum) + ">" + line.strip().replace("#","") + "</h" + str(headernum) + ">\n")
         continue
+    # don't process things that look like tags
     if line.strip()[0] == '<':
         outfile.write(line)
         continue
