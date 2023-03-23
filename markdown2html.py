@@ -72,7 +72,7 @@ for filename in sys.argv[1:]:
         line = "<li>" + line + "</li>\n"
     line = re.sub(r'[-*][-*](.*)[-*][-*]', r'<strong>\1</strong>', line)
     line = re.sub(r'([^!])\[(.+)\]\((.+)\)', r'\1<a href="\3">\2</a>', line)
-    line = re.sub(r'!\[(.+)\]\((.+)\)', r'<img src="\1"></img>', line)
+    line = re.sub(r'!\[(.+)\]\((.+)\)', r'<img alt="\1" src="\2"></img>', line)
     if not line.find("["):
         line = re.sub(r'[-*](.+)[-*]', r'<emph>\1</emph>',line)
     outfile.write(line)
