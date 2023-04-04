@@ -10,13 +10,9 @@ supports
 	images
 	lists (somewhat buggily)
 	boldface and italics
+	code blocks
+	tables
 
 doesn't support
-	tables
-	lists fully
-	code sections
 	probably other markdown functionality I'm not even aware exists
 
-TODO:
-	finish markdown support
-	add GUI for file select
