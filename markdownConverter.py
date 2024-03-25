@@ -32,6 +32,8 @@ def convert_markdown(markdownFilename, htmlFilename=""):
     # skip blank lines
     if len(line.strip()) == 0:
       continue
+    line = line.replace("<script>","&lt;script&gt;")
+    line = line.replace("</script>","&lt;/script&gt;")
     firstchar = line.strip()[0]
     if re.match(r"```.*", line.strip()): # ''' means start or stop code block
       if (codeBlock): # end the code block
@@ -88,6 +90,6 @@ def convert_markdown(markdownFilename, htmlFilename=""):
           line = re.sub(r'[-*](.+)[-*]', r'<emph>\1</emph>',line)
       previousIndentLevel = indentLevel
     outfile.write(line)
-  outfile.write("</body>")
+  outfile.write("</body></html>")
   outfile.close()
   infile.close()
